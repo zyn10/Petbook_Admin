@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1055007900065-u6uvja3gdvfi6puq8b4sc2t4k812p2hh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1055007900065-u6uvja3gdvfi6puq8b4sc2t4k812p2hh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAVXwnehfzj7egSw8GMJdNjpWAgLdbgXCA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1055007900065</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.petbookAdmin</string>
+	<key>PROJECT_ID</key>
+	<string>petbookdb-91436</string>
+	<key>STORAGE_BUCKET</key>
+	<string>petbookdb-91436.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1055007900065:ios:63f4b66d4474b67a948be0</string>
+</dict>
+</plist>
