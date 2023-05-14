@@ -37,11 +37,11 @@ class _SplashScreenState extends State<SplashScreen> {
               Image.asset(
                 'assets/main.png',
                 width: 400,
-                height: 00,
+                height: 400,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
               const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
             ],
           ),

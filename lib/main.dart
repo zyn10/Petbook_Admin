@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:petbook_admin/screens/alerts.dart';
 import 'package:petbook_admin/screens/splash_screen.dart';
 
 Future<void> main() async {
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Alerts(),
+      home: const SplashScreen(),
     );
   }
 }

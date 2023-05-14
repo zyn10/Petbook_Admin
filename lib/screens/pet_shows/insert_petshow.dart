@@ -1,17 +1,20 @@
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petbook_admin/resources/firestore_methods.dart';
+import 'package:petbook_admin/screens/home.dart';
 import 'package:petbook_admin/utils/utils.dart';
 
-
-class PetShows extends StatefulWidget {
-  const PetShows({super.key});
+class PetShowInfo extends StatefulWidget {
+  const PetShowInfo({Key? key}) : super(key: key);
 
   @override
-  State<PetShows> createState() => _PetShowsState();
+  State<PetShowInfo> createState() => _PetShowInfoState();
 }
 
-class _PetShowsState extends State<PetShows> {
+class _PetShowInfoState extends State<PetShowInfo> {
+  bool _isloading = false;
+  Uint8List? _image;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
@@ -19,9 +22,6 @@ class _PetShowsState extends State<PetShows> {
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
-  Uint8List? _image;
-
-  bool _isloading = false;
   @override
   void dispose() {
     _nameController.dispose();
@@ -39,29 +39,28 @@ class _PetShowsState extends State<PetShows> {
     });
   }
 
-  Future<void> insertPetShow() async {
+  Future<void> push() async {
     setState(() {
       _isloading = true;
     });
-    String res = await AuthMethods().signUpUser(
-      email: _emailController.text,
-      password: _passwordController.text,
-      username: _userNameController.text,
-      fullname: _fullNameController.text,
-      address: _addressController.text,
-      file: _image!,
-    );
+    String output = await FireStoreMethods().uploadPetShowInfo(
+        name: _nameController.text,
+        location: _locationController.text,
+        date: _dateController.text,
+        time: _timeController.text,
+        description: _descController.text,
+        image: _image);
     setState(() {
       _isloading = false;
     });
-    if (res != 'success') {
+    if (output != 'success') {
       // ignore: use_build_context_synchronously
-      showSnackBar(context, res);
+      showSnackBar(context, output);
     } else {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const OurLogin(),
+          builder: (context) => const HomeScreen(),
         ),
       );
     }
@@ -69,7 +68,20 @@ class _PetShowsState extends State<PetShows> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = getScreenSize();
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: const Text(
+          "Add Pet Show",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -80,17 +92,6 @@ class _PetShowsState extends State<PetShows> {
                 children: [
                   const SizedBox(
                     height: 70.0,
-                  ),
-                  const Text(
-                    "Petbook SignUp",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
                   ),
                   Center(
                     child: Stack(
@@ -122,14 +123,21 @@ class _PetShowsState extends State<PetShows> {
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _userNameController,
+                    controller: _nameController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person_outline_outlined),
-                      hintText: "User Name",
+                      prefixIcon: Icon(Icons.title_outlined),
+                      hintText: "Title of the Petshow",
+                      errorStyle: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 15,
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter user name';
+                        return 'Please enter a title';
+                      }
+                      if (value.length < 3 || value.length > 30) {
+                        return 'Title should be between 3 to 30 characters';
                       }
                       return null;
                     },
@@ -138,16 +146,16 @@ class _PetShowsState extends State<PetShows> {
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _fullNameController,
+                    controller: _locationController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person_outline_outlined),
-                      hintText: "Full Name",
+                      prefixIcon: Icon(Icons.location_pin),
+                      hintText: "Location",
                       errorStyle:
                           TextStyle(color: Colors.redAccent, fontSize: 15),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter full name';
+                        return 'Enter Show Address';
                       }
                       return null;
                     },
@@ -156,16 +164,27 @@ class _PetShowsState extends State<PetShows> {
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _addressController,
+                    controller: _dateController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.location_city),
-                      hintText: "Address",
-                      errorStyle:
-                          TextStyle(color: Colors.redAccent, fontSize: 15),
+                      prefixIcon: Icon(Icons.date_range),
+                      hintText: "Date",
+                      errorStyle: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 15,
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your address';
+                        return 'Please enter a date';
+                      }
+                      final dateRegExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+                      if (!dateRegExp.hasMatch(value)) {
+                        return 'Please enter a valid date in the format of yyyy-MM-dd';
+                      }
+                      try {
+                        DateTime.parse(value);
+                      } catch (e) {
+                        return 'Please enter a valid date';
                       }
                       return null;
                     },
@@ -174,39 +193,39 @@ class _PetShowsState extends State<PetShows> {
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _emailController,
+                    controller: _timeController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.alternate_email),
-                      hintText: "Email",
+                      prefixIcon: Icon(Icons.timer),
+                      hintText: "Time",
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a time';
+                      }
+                      final timeRegExp = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
+                      if (!timeRegExp.hasMatch(value)) {
+                        return 'Please enter a valid time in the format of HH:mm';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _passwordController,
+                    controller: _descController,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock_outline),
-                      hintText: "Password",
+                      prefixIcon: Icon(Icons.edit_note_rounded),
+                      hintText: "Description",
                     ),
-                    obscureText: true,
+                    maxLines: null,
+                    textInputAction: TextInputAction.newline,
                   ),
                   const SizedBox(
                     height: 20.0,
-                  ),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock_open),
-                      hintText: "Confirm Password",
-                    ),
-                    obscureText: true,
-                  ),
-                  const SizedBox(
-                    height: 30.0,
                   ),
                   ElevatedButton(
-                    onPressed: signUpUser,
+                    onPressed: push,
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
@@ -220,33 +239,7 @@ class _PetShowsState extends State<PetShows> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text('Sign Up'),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Already have an account? "),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return const OurLogin();
-                              },
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(100, 40)),
-                        child: const Text(
-                          "Login here",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 133, 133, 133),
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
+                        : const Text('Add pet show'),
                   ),
                 ],
               ),

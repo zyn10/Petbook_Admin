@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petbook_admin/screens/pet_shows/insert_petshow.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(20),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  backgroundColor: Color.fromARGB(255, 225, 225, 225),
+                  backgroundColor: const Color.fromARGB(255, 225, 225, 225),
                 ),
                 onPressed: () {},
                 child: Row(
@@ -62,9 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(20),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  backgroundColor: Color.fromARGB(255, 225, 225, 225),
+                  backgroundColor: const Color.fromARGB(255, 225, 225, 225),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PetShowInfo()),
+                  );
+                },
                 child: Row(
                   children: const [
                     Icon(
@@ -93,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(20),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  backgroundColor: Color.fromARGB(255, 225, 225, 225),
+                  backgroundColor: const Color.fromARGB(255, 225, 225, 225),
                 ),
                 onPressed: () {},
                 child: Row(
