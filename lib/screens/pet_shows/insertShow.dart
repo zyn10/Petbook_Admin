@@ -78,46 +78,58 @@ class _PetShowInfoState extends State<PetShowInfo> {
           style: TextStyle(fontSize: 18.0, color: Colors.black),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ));
+            }),
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Form(
               child: ListView(
                 padding: const EdgeInsets.all(20.0),
                 children: [
-                  const SizedBox(
-                    height: 70.0,
-                  ),
-                  Center(
-                    child: Stack(
-                      children: [
-                        _image != null
-                            ? CircleAvatar(
-                                radius: 64,
-                                backgroundImage: MemoryImage(_image!),
-                              )
-                            : const CircleAvatar(
-                                radius: 64,
-                                backgroundImage: NetworkImage(
-                                    "https://t3.ftcdn.net/jpg/02/10/49/86/360_F_210498655_ywivjjUe6cgyt52n4BxktRgDCfFg8lKx.jpg"),
-                              ),
-                        Positioned(
-                          bottom: -10,
-                          left: 80,
-                          child: IconButton(
-                            onPressed: selectImage,
-                            icon: const Icon(
-                              Icons.add_a_photo,
-                            ),
-                          ),
-                        ),
-                      ],
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.grey,
+                      ),
                     ),
+                    alignment: Alignment.center,
+                    child: _image != null
+                        ? Image.memory(
+                            _image!,
+                            fit: BoxFit.cover,
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                iconSize: 80,
+                                color: Colors.grey,
+                                onPressed: selectImage,
+                                icon: const Icon(
+                                  Icons.add_a_photo,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Tap to add a Image for PetShow',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                   ),
                   const SizedBox(
                     height: 20.0,
@@ -167,7 +179,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
                     controller: _dateController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.date_range),
-                      hintText: "Date",
+                      hintText: "dd-mm-yy",
                       errorStyle: TextStyle(
                         color: Colors.redAccent,
                         fontSize: 15,
@@ -196,7 +208,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
                     controller: _timeController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.timer),
-                      hintText: "Time",
+                      hintText: "00:00:00",
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -208,18 +220,6 @@ class _PetShowInfoState extends State<PetShowInfo> {
                       }
                       return null;
                     },
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  TextFormField(
-                    controller: _descController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.edit_note_rounded),
-                      hintText: "Description",
-                    ),
-                    maxLines: null,
-                    textInputAction: TextInputAction.newline,
                   ),
                   const SizedBox(
                     height: 20.0,
