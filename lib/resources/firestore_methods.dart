@@ -72,6 +72,18 @@ class FireStoreMethods {
     return task.ref.getDownloadURL();
   }
 
+// Delete User
+  Future<String> deleteUser(String uid) async {
+    String res = "Some error occurred";
+    try {
+      await _firestore.collection('users').doc(uid).delete();
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
   // Delete PetShow
   Future<String> deletePetShow(String petshowId) async {
     String res = "Some error occurred";

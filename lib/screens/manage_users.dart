@@ -1,50 +1,55 @@
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:core';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:petbook_admin/utils/user_row.dart';
 
-// class ManageUsersScreen extends StatefulWidget {
-//   @override
-//   _ManageUsersScreenState createState() => _ManageUsersScreenState();
-// }
+class PetShowScreen extends StatefulWidget {
+  const PetShowScreen({super.key});
 
-// class _ManageUsersScreenState extends State<ManageUsersScreen> {
-//   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-//   CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
+  @override
+  State<PetShowScreen> createState() => _PetShowScreenState();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Manage Users'),
-//       ),
-//       body: StreamBuilder<QuerySnapshot>(
-//         stream: usersRef.snapshots(),
-//         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//           if (snapshot.hasError) {
-//             return Text('Error: ${snapshot.error}');
-//           }
+class _PetShowScreenState extends State<PetShowScreen> {
+  Color backgroundColor = Colors.white;
 
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return Center(child: CircularProgressIndicator());
-//           }
-
-//           return ListView.builder(
-//             itemCount: snapshot.data.docs.length,
-//             itemBuilder: (BuildContext context, int index) {
-//               DocumentSnapshot document = snapshot.data.docs[index];
-//               return ListTile(
-//                 title: Text(document['name']),
-//                 subtitle: Text(document['email']),
-//                 trailing: IconButton(
-//                   icon: Icon(Icons.delete),
-//                   onPressed: () async {
-//                     await usersRef.doc(document.id).delete();
-//                   },
-//                 ),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        title: const Text(
+          "Pet Shows",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 22, color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .orderBy('name')
+            .snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (!snapshot.hasData) {
+            return const Center(
+              child: Text('No Users'),
+            );
+          }
+          final data = snapshot.requireData;
+          return ListView.builder(
+            itemCount: data.docs.length,
+            itemBuilder: (context, index) => UserRow(
+              snap: data.docs[index].data(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
