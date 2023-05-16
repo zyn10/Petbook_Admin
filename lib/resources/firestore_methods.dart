@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:petbook_admin/model/alert_model.dart';
+import 'package:petbook_admin/model/ngo_model.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petbook_admin/model/petshow_model.dart';
 import 'package:uuid/uuid.dart';
@@ -20,7 +22,8 @@ class FireStoreMethods {
 
 //     return userModel;
 //   }
-  Future<String> uploadPetShowInfo({
+
+  Future<String> uploadShow({
     required String name,
     required String location,
     required String date,
@@ -29,7 +32,6 @@ class FireStoreMethods {
     required Uint8List? image,
   }) async {
     String output = "Something went wrong";
-
     if (image != null &&
         name != "" &&
         location != "" &&
@@ -37,21 +39,63 @@ class FireStoreMethods {
         time != "" &&
         description != "") {
       try {
-        String psid = const Uuid().v1();
-        String url = await uploadImageToDatabase(image: image, uid: psid);
+        String uid = const Uuid().v1();
+        String url = await uploadImageToDatabase(image: image, uid: uid);
 
-        PetShow petShow = PetShow(
-          psid: psid,
+        PetShow petShowModel = PetShow(
           name: name,
           location: location,
           date: date,
           time: time,
           description: description,
           imageUrl: url,
+          psid: uid,
           datePublished: DateTime.now(),
         );
 
-        await _firestore.collection("petShow").doc(psid).set(petShow.getJson());
+        await _firestore
+            .collection("petShow")
+            .doc(uid)
+            .set(petShowModel.getJson());
+        output = "success";
+      } catch (e) {
+        output = e.toString();
+      }
+    } else {
+      output = "Please make sure all the fields are not empty";
+    }
+
+    return output;
+  }
+
+  Future<String> uploadNGO({
+    required String title,
+    required String location,
+    required String ph,
+    required String description,
+    required Uint8List? image,
+  }) async {
+    String output = "Something went wrong";
+    if (image != null &&
+        title != "" &&
+        location != "" &&
+        ph != "" &&
+        description != "") {
+      try {
+        String uid = const Uuid().v1();
+        String url = await uploadImageToDatabase(image: image, uid: uid);
+
+        NGO ngoModel = NGO(
+          title: title,
+          location: location,
+          ph: ph,
+          description: description,
+          imageUrl: url,
+          ngoid: uid,
+          datePublished: DateTime.now(),
+        );
+
+        await _firestore.collection("NGO").doc(uid).set(ngoModel.getJson());
         output = "success";
       } catch (e) {
         output = e.toString();
@@ -94,5 +138,38 @@ class FireStoreMethods {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<String> pushAlert({
+    required String title,
+    required String date,
+    required String description,
+  }) async {
+    String output = "Something went wrong";
+    if (title != "" && date != "" && description != "") {
+      try {
+        String uid = const Uuid().v1();
+
+        Alerts alertModel = Alerts(
+          title: title,
+          date: date,
+          description: description,
+          alertid: uid,
+          datePublished: DateTime.now(),
+        );
+
+        await _firestore
+            .collection("alerts")
+            .doc(uid)
+            .set(alertModel.getJson());
+        output = "success";
+      } catch (e) {
+        output = e.toString();
+      }
+    } else {
+      output = "Please make sure all the fields are not empty";
+    }
+
+    return output;
   }
 }

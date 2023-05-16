@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:petbook_admin/screens/NGO/contactNGO.dart';
+import 'package:petbook_admin/screens/alerts/create_alert.dart';
+import 'package:petbook_admin/screens/manage_users/manage_users.dart';
 import 'package:petbook_admin/screens/pet_shows/insertShow.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -34,7 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(15)),
                   backgroundColor: const Color.fromARGB(255, 225, 225, 225),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ManagerUser()),
+                  );
+                },
                 child: Row(
                   children: const [
                     Icon(
@@ -102,7 +110,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(15)),
                   backgroundColor: const Color.fromARGB(255, 225, 225, 225),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateAlert()),
+                  );
+                },
                 child: Row(
                   children: const [
                     Icon(
@@ -113,6 +127,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                         child: Text(
                           "Generate Alerts ",
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  backgroundColor: const Color.fromARGB(255, 225, 225, 225),
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NGOInfo()),
+                  );
+                },
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.local_hospital,
+                      color: Colors.blueGrey,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "Add NGO Contact ",
                           style: TextStyle(
                             color: Colors.blueGrey,
                             fontWeight: FontWeight.w600,

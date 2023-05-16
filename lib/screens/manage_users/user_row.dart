@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petbook_admin/resources/firestore_methods.dart';
+import 'package:petbook_admin/screens/manage_users/manage_users.dart';
 
 class UserRow extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -31,7 +32,7 @@ class _UserRowState extends State<UserRow> {
               CircleAvatar(
                 radius: 16,
                 backgroundImage: NetworkImage(
-                  widget.snap["profImage"],
+                  widget.snap["photoUrl"],
                 ),
               ),
               Expanded(
@@ -56,35 +57,21 @@ class _UserRowState extends State<UserRow> {
               IconButton(
                   onPressed: () async {
                     FireStoreMethods().deleteUser(widget.snap['uid']);
-                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ManagerUser()),
+                    );
                   },
-                  icon: const Icon(Icons.more_vert))
+                  icon: const Icon(Icons.delete))
             ],
           ),
         ),
-
-        //Description and number of comments
-
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DefaultTextStyle(
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                child: Text(
-                  '${widget.snap['likes'].length} likes',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            ],
-          ),
-        )
+        const Divider(
+          // Add a Divider widget as a separator
+          height: 1,
+          color: Colors.grey,
+        ),
       ]),
     );
   }

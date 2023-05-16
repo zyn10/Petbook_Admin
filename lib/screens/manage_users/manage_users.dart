@@ -1,16 +1,17 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:petbook_admin/utils/user_row.dart';
+import 'package:petbook_admin/screens/home.dart';
+import 'package:petbook_admin/screens/manage_users/user_row.dart';
 
-class PetShowScreen extends StatefulWidget {
-  const PetShowScreen({super.key});
+class ManagerUser extends StatefulWidget {
+  const ManagerUser({super.key});
 
   @override
-  State<PetShowScreen> createState() => _PetShowScreenState();
+  State<ManagerUser> createState() => _ManagerUserState();
 }
 
-class _PetShowScreenState extends State<PetShowScreen> {
+class _ManagerUserState extends State<ManagerUser> {
   Color backgroundColor = Colors.white;
 
   @override
@@ -19,17 +20,21 @@ class _PetShowScreenState extends State<PetShowScreen> {
       appBar: AppBar(
         backgroundColor: Colors.orange,
         title: const Text(
-          "Pet Shows",
+          "Manage Users",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 22, color: Colors.black, fontWeight: FontWeight.bold),
         ),
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ));
+            }),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .orderBy('name')
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

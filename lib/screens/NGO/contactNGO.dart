@@ -6,30 +6,28 @@ import 'package:petbook_admin/resources/firestore_methods.dart';
 import 'package:petbook_admin/screens/home.dart';
 import 'package:petbook_admin/utils/utils.dart';
 
-class PetShowInfo extends StatefulWidget {
-  const PetShowInfo({Key? key}) : super(key: key);
+class NGOInfo extends StatefulWidget {
+  const NGOInfo({Key? key}) : super(key: key);
 
   @override
-  State<PetShowInfo> createState() => _PetShowInfoState();
+  State<NGOInfo> createState() => _NGOState();
 }
 
-class _PetShowInfoState extends State<PetShowInfo> {
+class _NGOState extends State<NGOInfo> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   Uint8List? _image;
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _phController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _titleController.dispose();
     _locationController.dispose();
-    _dateController.dispose();
-    _timeController.dispose();
+    _phController.dispose();
     _descController.dispose();
     super.dispose();
   }
@@ -46,11 +44,10 @@ class _PetShowInfoState extends State<PetShowInfo> {
       setState(() {
         _isLoading = true;
       });
-      String output = await FireStoreMethods().uploadShow(
-        name: _nameController.text,
+      String output = await FireStoreMethods().uploadNGO(
+        title: _titleController.text,
         location: _locationController.text,
-        date: _dateController.text,
-        time: _timeController.text,
+        ph: _phController.text,
         description: _descController.text,
         image: _image,
       );
@@ -62,8 +59,8 @@ class _PetShowInfoState extends State<PetShowInfo> {
         showSnackBar(context, output);
       } else {
         NotificationService().showNotification(
-          title: _nameController.text,
-          body: 'PetShow added',
+          title: _titleController.text,
+          body: 'NGO Added',
         );
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(
@@ -81,7 +78,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          "Add Pet Show",
+          "NGO Details",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 18.0, color: Colors.black),
         ),
@@ -134,7 +131,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
                               ),
                               const SizedBox(height: 16),
                               const Text(
-                                'Tap to add an Image for PetShow',
+                                'NGO Image',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -147,10 +144,10 @@ class _PetShowInfoState extends State<PetShowInfo> {
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _nameController,
+                    controller: _titleController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.title_outlined),
-                      hintText: "Title",
+                      hintText: "NGO Name",
                       errorStyle: TextStyle(
                         color: Colors.redAccent,
                         fontSize: 15,
@@ -158,7 +155,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter a title';
+                        return 'Please enter a name of NGO';
                       }
                       return null;
                     },
@@ -207,10 +204,10 @@ class _PetShowInfoState extends State<PetShowInfo> {
                     height: 20.0,
                   ),
                   TextFormField(
-                    controller: _dateController,
+                    controller: _phController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.date_range),
-                      hintText: "dd-mm-yy",
+                      hintText: "+923000000000",
                       errorStyle: TextStyle(
                         color: Colors.redAccent,
                         fontSize: 15,
@@ -218,27 +215,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter a date';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  TextFormField(
-                    controller: _timeController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.timer),
-                      hintText: "00:00 am/pm",
-                      errorStyle: TextStyle(
-                        color: Colors.redAccent,
-                        fontSize: 15,
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter a time';
+                        return 'Please enter a phone number';
                       }
                       return null;
                     },
@@ -262,7 +239,7 @@ class _PetShowInfoState extends State<PetShowInfo> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text('Add pet show'),
+                        : const Text('Add NGO'),
                   ),
                 ],
               ),
