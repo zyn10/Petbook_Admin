@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petbook_admin/screens/NGO/contactNGO.dart';
+import 'package:petbook_admin/screens/NGO/contact_ngo.dart';
 import 'package:petbook_admin/screens/alerts/create_alert.dart';
 import 'package:petbook_admin/screens/manage_users/manage_users.dart';
-import 'package:petbook_admin/screens/pet_shows/insertShow.dart';
+import 'package:petbook_admin/screens/pet_shows/insert_show.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context) => const ManagerUser()),
                   );
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Icon(
                       Icons.people,
                       color: Colors.blueGrey,
@@ -80,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context) => const PetShowInfo()),
                   );
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Icon(
                       Icons.event,
                       color: Colors.blueGrey,
@@ -117,8 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context) => const CreateAlert()),
                   );
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Icon(
                       Icons.crisis_alert_sharp,
                       color: Colors.blueGrey,
@@ -153,8 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => const NGOInfo()),
                   );
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Icon(
                       Icons.local_hospital,
                       color: Colors.blueGrey,
