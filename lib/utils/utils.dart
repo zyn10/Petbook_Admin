@@ -13,10 +13,6 @@ pickImage(ImageSource source) async {
   const Text('No Image Selected');
 }
 
-Size getScreenSize() {
-  return MediaQueryData.fromView(WidgetsBinding.instance.window).size;
-}
-
 Future<Uint8List?> productImage() async {
   ImagePicker picker = ImagePicker();
   XFile? file = await picker.pickImage(source: ImageSource.gallery);
